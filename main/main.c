@@ -18,13 +18,7 @@ void app_main(void)
   {
     camera_fb_t *pic = take_photo();
 
-    size_t out_len;
-    uint8_t *out;
-
-    frame2jpg(pic, 100, &out, &out_len);
-    send_photo(out, out_len);
-
-    free(out);
+     send_photo(pic->buf, pic->len);
     esp_camera_fb_return(pic);
     vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
