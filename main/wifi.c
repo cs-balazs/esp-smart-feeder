@@ -7,6 +7,7 @@
 // TODO: Implement reconnect
 
 uint8_t static wifi_connected = 0;
+uint8_t static try_to_reconnect = 0;
 
 static const char *WIFI_TAG = "feeder-cam:wifi-connection";
 
@@ -20,9 +21,12 @@ wifi_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t
     break;
   case WIFI_EVENT_STA_CONNECTED:
     ESP_LOGI(WIFI_TAG, "Connected!");
+    try_to_reconnect = 0;
     break;
   case WIFI_EVENT_STA_DISCONNECTED:
     ESP_LOGW(WIFI_TAG, "Lost connection!");
+    wifi_connected = 0;
+    try_to_reconnect = 1;
     break;
   case IP_EVENT_STA_GOT_IP:
     ESP_LOGW(WIFI_TAG, "Got IP address!");
@@ -57,6 +61,10 @@ void await_wifi_connection()
 {
   while (!wifi_connected)
   {
+    if (try_to_reconnect)
+    {
+      esp_wifi_connect();
+    }
     vTaskDelay(500 / portTICK_PERIOD_MS);
     ESP_LOGI(WIFI_TAG, "Awaiting connection...");
   }

@@ -12,13 +12,13 @@ void app_main(void)
   ESP_ERROR_CHECK(init_camera());
   init_telegram();
 
-  await_wifi_connection();
-
   while (1)
   {
+    await_wifi_connection();
+
     camera_fb_t *pic = take_photo();
 
-     send_photo(pic->buf, pic->len);
+    send_photo(pic->buf, pic->len);
     esp_camera_fb_return(pic);
     vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
