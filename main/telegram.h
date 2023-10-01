@@ -5,6 +5,5 @@
 #include "stddef.h"
 
 void send_photo(uint8_t *body, size_t body_len);
-void init_telegram();
 
 #endif

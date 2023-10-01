@@ -10,7 +10,6 @@ void app_main(void)
   nvs_flash_init();
   wifi_connection();
   ESP_ERROR_CHECK(init_camera());
-  init_telegram();
 
   while (1)
   {
